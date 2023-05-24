@@ -1,11 +1,12 @@
 package com.example.shooosonlineshop.service.impl;
 
+import com.example.shooosonlineshop.config.SecurityConfig;
 import com.example.shooosonlineshop.model.User;
 import com.example.shooosonlineshop.model.dto.UserDTO;
 import com.example.shooosonlineshop.model.enums.Role;
 import com.example.shooosonlineshop.repository.UserRepository;
 import com.example.shooosonlineshop.service.UserService;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,11 +19,14 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
-@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-
+    @Autowired
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder){
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
     @Override
     public Boolean save(UserDTO userDTO) {
         if (!Objects.equals(userDTO.getPassword(), userDTO.getMatchingPassword())) {
