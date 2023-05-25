@@ -2,7 +2,6 @@ package com.example.shooosonlineshop.controller;
 
 import com.example.shooosonlineshop.model.dto.UserDTO;
 import com.example.shooosonlineshop.service.UserService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +17,11 @@ public class UserController {
     public UserController(UserService userService){
         this.userService = userService;
     }
+    @GetMapping
+    public String userList(Model model){
+        model.addAttribute("users", userService.getAll());
+        return "userList";
+    }
     @GetMapping("/new")
     public String newUser(Model model){
         model.addAttribute("user", new UserDTO());
@@ -26,7 +30,7 @@ public class UserController {
     @PostMapping("/new")
     public String saveUser(UserDTO userDTO, Model model){
         if (userService.save(userDTO)) {
-            return "redirect:/";
+            return "redirect:/users";
         }else {
             model.addAttribute("user", userDTO);
             return "user";
