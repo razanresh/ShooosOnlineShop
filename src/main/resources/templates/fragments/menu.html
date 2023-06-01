@@ -1,19 +1,36 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
-<div id="nav-menu" align="center"></div>
-<table>
+<table id="nav-menu" align="center"></table>
   <tr>
-    <td>Menu</td>
-    <td><a th:href="@{/}"></a>Home</td>
-    <td><a th:href="@{/products}"></a>Products</td>
-    <td><a th:href="@{/login}"></a>Login</td>
-    <td><a th:href="@{/users}"></a>Users</td>
-  </tr>
-</table>
+      <td align="center">
+          <table>
+                <tr>
+                   <td>Menu</td>
+                   <td><a th:href="@{/}"></a>Home</td>
+                   <td><a th:href="@{/products}"></a>Products</td>
+                   <td sec:authorize="hasAuthority('ADMIN', 'MANAGER')"><a th:href="@{/users}">Users</a></td>
+                </tr>
+          </table>
+      </td>
+<td align="right">
+<div sec:authorize="isAuthenticaed()">
+    <div>
+        Hello, <span sec:authentication="principial.username">Bill</span>
+    </div>
+    <div>
+        <a th:href="@{/logout}">Logout</a>
+    </div>
+</div>
+<div sec:authorize="!isAuthenticated()">
+    <div>
+        Hello, Unknown, Please <a th:href="@{/login}">Login</a>
+    </div>
+</div>
+</td>
 </body>
 </html>
