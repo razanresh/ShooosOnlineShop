@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,7 @@ public class UserServiceImpl implements UserService {
         this.passwordEncoder = passwordEncoder;
     }
     @Override
+    @Transactional
     public Boolean save(UserDTO userDTO) {
         if (!Objects.equals(userDTO.getPassword(), userDTO.getMatchingPassword())) {
             throw new RuntimeException("Password is not equals");
@@ -44,12 +46,44 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void save(User user) {
+        userRepository.save(user);
+    }
+
+    @Override
     public List<UserDTO> getAll() {
         return userRepository
                 .findAll()
                 .stream()
                 .map(this::toDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public User findByName(String name) {
+        return userRepository.findFirstByName(name);
+    }
+
+    @Override
+    @Transactional
+    public void updateProfile(UserDTO userDTO) {
+        User savedUser = userRepository.findFirstByName(userDTO.getUsername());
+        if(savedUser == null){
+            throw new RuntimeException("User not found by name " + userDTO.getUsername());
+        }
+
+        boolean changed = false;
+        if(userDTO.getPassword() != null && ! userDTO.getPassword().isEmpty()){
+            savedUser.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+            changed = true;
+        }
+        if(!Objects.equals(userDTO.getEmail(), savedUser.getEmail())){
+            savedUser.setEmail(userDTO.getEmail());
+            changed = true;
+        }
+        if(changed){
+            userRepository.save(savedUser);
+        }
     }
 
     @Override
