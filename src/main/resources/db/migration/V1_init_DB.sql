@@ -37,7 +37,7 @@ create sequence product_seq start 1 increment 1;
 
 create table products (
                           id int8 not null,
-                          price float8,
+                          price float(53),
                           title varchar(255),
                           primary key (id)
 );

@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class CartDTO {
         this.amountProducts = cartDetails.size();
         this.sum = cartDetails.stream()
                 .map(CartDetailDTO::getSum)
-                .mapToDouble(Double::doubleValue)
+                .mapToDouble(BigDecimal::doubleValue)
                 .sum();
     }
 }

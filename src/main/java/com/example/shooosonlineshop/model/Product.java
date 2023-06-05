@@ -22,7 +22,7 @@ public class Product {
     private Long id;
     private String name;
     private String title;
-    private Double price;
+    private BigDecimal price;
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "product_categories",
             joinColumns = @JoinColumn(name = "product_id"),

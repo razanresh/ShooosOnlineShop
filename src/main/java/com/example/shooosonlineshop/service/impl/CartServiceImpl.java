@@ -71,7 +71,7 @@ public class CartServiceImpl implements CartService {
             }
             else {
                 detail.setAmount(detail.getAmount() + 1.0);
-                detail.setSum(detail.getSum() + product.getPrice());
+                detail.setSum(detail.getSum().add(product.getPrice()));
             }
         }
 
